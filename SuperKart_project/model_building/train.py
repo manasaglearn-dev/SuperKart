@@ -25,8 +25,8 @@ ytest_path  = "hf://datasets/armakar123/my_Superkart/ytest.csv"
 
 Xtrain = pd.read_csv(Xtrain_path)
 Xtest  = pd.read_csv(Xtest_path)
-ytrain = pd.read_csv(ytrain_path).squeeze()
-ytest  = pd.read_csv(ytest_path).squeeze()
+ytrain = pd.read_csv(ytrain_path)
+ytest  = pd.read_csv(ytest_path)
 
 # ===============================
 # Feature groups
@@ -98,8 +98,11 @@ print("Best Params:\n", grid_search.best_params_)
 y_pred_train = best_model.predict(Xtrain)
 y_pred_test  = best_model.predict(Xtest)
 
-print(f"\nTrain RMSE: {mean_squared_error(ytrain, y_pred_train, squared=False):.2f}")
-print(f"Test RMSE : {mean_squared_error(ytest, y_pred_test, squared=False):.2f}")
+train_rmse = np.sqrt(mean_squared_error(ytrain, y_pred_train))
+test_rmse  = np.sqrt(mean_squared_error(ytest, y_pred_test))
+
+print(f"\nTrain RMSE: {train_rmse:.2f}")
+print(f"Test RMSE : {test_rmse:.2f}")
 print(f"Test R²   : {r2_score(ytest, y_pred_test):.3f}")
 
 # ===============================
