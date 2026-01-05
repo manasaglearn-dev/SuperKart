@@ -7,7 +7,7 @@ import joblib
 # Load Model from Hugging Face
 # ===============================
 model_path = hf_hub_download(
-    repo_id="armakar123/Product_sales",
+    repo_id="armakar123/superkart-sales-model",
     filename="best_superkart_model_v1.joblib"
 )
 
