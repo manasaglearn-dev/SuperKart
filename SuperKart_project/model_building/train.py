@@ -1,9 +1,6 @@
 
-# ===============================
-# Imports
-# ===============================
-import pandas as pd
 import numpy as np
+import pandas as pd
 import os
 import joblib
 
@@ -59,7 +56,7 @@ preprocessor = make_column_transformer(
 )
 
 # ===============================
-# XGBoost REGRESSOR
+# XGBoost Regressor
 # ===============================
 xgb_model = xgb.XGBRegressor(
     random_state=42,
@@ -101,13 +98,9 @@ print("Best Params:\n", grid_search.best_params_)
 y_pred_train = best_model.predict(Xtrain)
 y_pred_test  = best_model.predict(Xtest)
 
-train_rmse = np.sqrt(mean_squared_error(ytrain, y_pred_train))
-test_rmse  = np.sqrt(mean_squared_error(ytest, y_pred_test))
-test_r2    = r2_score(ytest, y_pred_test)
-
-print(f"\nTrain RMSE: {train_rmse:.2f}")
-print(f"Test RMSE : {test_rmse:.2f}")
-print(f"Test R²   : {test_r2:.3f}")
+print(f"\nTrain RMSE: {mean_squared_error(ytrain, y_pred_train, squared=False):.2f}")
+print(f"Test RMSE : {mean_squared_error(ytest, y_pred_test, squared=False):.2f}")
+print(f"Test R²   : {r2_score(ytest, y_pred_test):.3f}")
 
 # ===============================
 # Save model
@@ -125,10 +118,8 @@ api = HfApi(token=os.getenv("HF_TOKEN"))
 
 try:
     api.repo_info(repo_id=repo_id, repo_type=repo_type)
-    print(f"Repo '{repo_id}' already exists.")
 except RepositoryNotFoundError:
     create_repo(repo_id=repo_id, repo_type=repo_type, private=False)
-    print(f"Repo '{repo_id}' created.")
 
 api.upload_file(
     path_or_fileobj=model_path,
@@ -138,3 +129,4 @@ api.upload_file(
 )
 
 print("✅ Model uploaded successfully to Hugging Face")
+
